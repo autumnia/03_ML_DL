@@ -63,5 +63,6 @@ train_labels = labels[:training_size]
 validation_sentences = sentences[training_size:]
 validation_labels = labels[training_size:]
 
+# 3단계  자연어 전처리 
 
 ```
