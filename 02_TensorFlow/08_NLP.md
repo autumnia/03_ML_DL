@@ -61,18 +61,21 @@ validation_sentences = sentences[training_size:]
 validation_labels = labels[training_size:]
 
 # 3단계  자연어 전처리 
-# 토큰나이저
+# 토큰나이저   OOV : Out Of Vocab token
 vocab_size = 1000
 oov_tok = "<OOV>"
 tokenizer = Tokenizer(num_words=vocab_size, oov_token='<OOV>')
+
+#  단어사전 만들기
 tokenizer.fit_on_texts(train_sentences)
 for key, value in tokenizer.word_index.items():
     print('{}  \t======>\t {}'.format(key, value))
     if value == 25:
         break
-len(tokenizer.word_index)
+len(tokenizer.word_index)  # 사이즈 확인
 
 word_index = tokenizer.word_index
+# 데이터 확인
 word_index['trump']
 word_index['hello']
 word_index['<OOV>']
@@ -86,20 +89,15 @@ train_sentences[4]
 word_index['j'], word_index['k'], word_index['rowling'], word_index['wishes'], word_index['snape'], word_index['happy']
 train_sequences[4]
 
-
-# 한 문장의 최대 단어 숫자
-max_length = 120
-
-# 잘라낼 문장의 위치
-trunc_type='post'
-
-# 채워줄 문장의 위치
-padding_type='post'
+max_length = 120    # 한 문장의 최대 단어 숫자
+trunc_type='post'   # 잘라낼 문장의 위치
+padding_type='post' # 채워줄 문장의 위치
 
 train_padded = pad_sequences(train_sequences, maxlen=max_length, truncating=trunc_type, padding=padding_type)
 validation_padded = pad_sequences(validation_sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type)
 
 train_padded.shape  # 변환후 세이프 확인
+ train_padded[0]    # 확인차 줄력
 
 # 4단계
 # label 값을 numpy array로 변환 ( model이 list type은 받아들이지 못하므로, numpy array로 변환합니다. )
