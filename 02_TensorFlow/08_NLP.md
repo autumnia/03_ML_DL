@@ -106,7 +106,7 @@ train_padded[0]    # 확인차 줄력
 train_labels = np.array(train_labels)
 validation_labels = np.array(validation_labels)
 
-# 고차원을 저차원으로 축소
+# 4단계 고차원을 저차원으로 축소
 embedding_dim = 16
 sample = np.array(train_padded[0])
 sample
@@ -114,7 +114,7 @@ sample
 x = Embedding(vocab_size, embedding_dim, input_length=max_length)
 x(sample)[0]
 
-# 4단계  모델정의
+# 5단계  모델정의
 model = Sequential([
     Embedding(vocab_size, embedding_dim, input_length=max_length),
     Bidirectional(LSTM(64, return_sequences=True)),
