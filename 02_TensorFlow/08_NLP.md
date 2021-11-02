@@ -66,29 +66,31 @@ vocab_size = 1000
 oov_tok = "<OOV>"
 tokenizer = Tokenizer(num_words=vocab_size, oov_token='<OOV>')
 
-#  단어사전 만들기
+# 3-1단계 단어사전 만들기
 tokenizer.fit_on_texts(train_sentences)
 for key, value in tokenizer.word_index.items():
     print('{}  \t======>\t {}'.format(key, value))
     if value == 25:
         break
-len(tokenizer.word_index)  # 사이즈 확인
 
-word_index = tokenizer.word_index
 # 데이터 확인
+len(tokenizer.word_index)  
+word_index = tokenizer.word_index
 word_index['trump']
 word_index['hello']
 word_index['<OOV>']
 
-
+# 3-2단계 문장을 숫자로 치환
 train_sequences = tokenizer.texts_to_sequences(train_sentences)
 validation_sequences = tokenizer.texts_to_sequences(validation_sentences)
 train_sequences[:5]   # 변환된 시퀀스 확인
 
+# 데이터 확인 ( 빈도수가 1000보다 떨어지면 1이 됨 )
 train_sentences[4]
 word_index['j'], word_index['k'], word_index['rowling'], word_index['wishes'], word_index['snape'], word_index['happy']
 train_sequences[4]
 
+# 3-3단계 문장의 길이 맞추기 
 max_length = 120    # 한 문장의 최대 단어 숫자
 trunc_type='post'   # 잘라낼 문장의 위치
 padding_type='post' # 채워줄 문장의 위치
@@ -97,13 +99,14 @@ train_padded = pad_sequences(train_sequences, maxlen=max_length, truncating=trun
 validation_padded = pad_sequences(validation_sequences, maxlen=max_length, padding=padding_type, truncating=trunc_type)
 
 train_padded.shape  # 변환후 세이프 확인
- train_padded[0]    # 확인차 줄력
+train_padded[0]    # 확인차 줄력
 
-# 4단계
+# 3-4단계
 # label 값을 numpy array로 변환 ( model이 list type은 받아들이지 못하므로, numpy array로 변환합니다. )
 train_labels = np.array(train_labels)
 validation_labels = np.array(validation_labels)
 
+# 고차원을 저차원으로 축소
 embedding_dim = 16
 sample = np.array(train_padded[0])
 sample
@@ -111,7 +114,7 @@ sample
 x = Embedding(vocab_size, embedding_dim, input_length=max_length)
 x(sample)[0]
 
-# 5단계  모델정의
+# 4단계  모델정의
 model = Sequential([
     Embedding(vocab_size, embedding_dim, input_length=max_length),
     Bidirectional(LSTM(64, return_sequences=True)),
