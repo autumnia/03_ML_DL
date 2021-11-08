@@ -109,7 +109,7 @@ validation_labels = np.array(validation_labels)
 # 4단계 고차원을 저차원으로 축소
 embedding_dim = 16
 sample = np.array(train_padded[0])
-sample
+sample  # 출력
 
 x = Embedding(vocab_size, embedding_dim, input_length=max_length)
 x(sample)[0]
