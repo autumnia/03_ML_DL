@@ -29,8 +29,14 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
+# Sequential API 용
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten
+
+# functional API 용
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import input
+
 
 # 단계 2 전처리
 train_datasets = tfds.load('cifar10', split='train')
@@ -56,26 +62,17 @@ for image, label in train_data.tak(1):
     print (label.shape)
 
 # 단계 3  모델 생성
-model = Sequentail([
-    Conv2D(32, 3, activation='relu', input_shape=(32, 32, 3)),
-    MaxPooling2D(2,2),
-    Conv2D(64, 3, activation='relu'),
-    MaxPooling2D(2,2),
-    Flatten(),
-    Dense(32, activation='relu'),
-    Dense(10, activateion='softmax'),
-])
-model.summary()   # 확인용
+input_ = input( shape( 32, 32, 3) )
 
-# 다른 방법
-model = Sequential()
-model.add( Conv2D(32, 3, activation='relu', input_shape=(32, 32, 3)) )
-model.add( MaxPooling2D(2,2) )
-model.add( Conv2D(64, 3, activation='relu') )
-model.add( MaxPooling2D(2,2) )
-model.add( Flatten() )
-model.add( Dense(32, activation='relu') )
-model.add( Dense(10, activation='softmax') )
+x = Conv2D(32, 3, activation='relu')(input_)
+x = MaxPooling2D(2, 2)(x)
+x = Conv2D(64, 3, activation='relu')(x)
+x = MaxPooling2D(2,2)(x)
+x = Flatten()(x)
+x = Dense(32, activation='relu')(x)
+x = Dense(10, activation='softmax')(x)
+
+model = Model(input_, x )
 model.summary()
 
 # 단계 4 모델 컴파일
@@ -91,8 +88,6 @@ model.fit(
     validation_data=(valid_data),
     epochs=10,
 )
-
-# 단계 6 모델 검증
 
 
 
