@@ -2,7 +2,7 @@
     https://www.tensorflow.org/datasets/catalog/overview
 
 ## 모델
-    Sequentail API
+    Functional API
 
 ## 학습
     train_on_batch
