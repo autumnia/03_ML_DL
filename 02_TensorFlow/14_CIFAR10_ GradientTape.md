@@ -69,11 +69,57 @@ model.compile(
 )
 
 # 단계 5 모델 학습
-model.fit( 
-    train_data,
-    validation_data=(valid_data),
-    epochs=10,
-)
+loss_function = tf.keras.losses.SparseCategoricalCrossentropy()
+optimizer = tf.keras.optimizers.Adam()
+
+train_loss  = tf.keras.metrics.Mean( name='train_loss')
+train_acc   = tf.keras.metrics.SparseCategoricalAccuracy( name='train_acc')
+
+valid_loss  = tf.keras.metrics.Mean( name='valid_loss')
+valid_acc   = tf.keras.metrics.SparseCategoricalAccuracy( name='valid_acc')
+
+@tf.tunction
+def train_step( image, label):
+    with tf.GradientTape() as tape:
+        prediction = model(image, training=True)
+        loss = loss_function( label, prediction )
+
+    gradients = tape.gradient(loss, model.trainable_bariables)
+    optimizer.apply_graients(zip(gradients.model.trainable_variables))
+
+    train_loss(loss)
+    train_acc(lable, prediction)
+
+@tf.tunction
+def valid_step( image, label):
+    with tf.GradientTape() as tape:
+        prediction = model(image, training=False)
+        loss = loss_function( label, prediction )
+
+    valid_loss(loss)
+    valid_acc(label, prediction)
+
+EPOCHS = 10 
+for epoch in range(EPOCHS):
+    train_loss.reset_states()
+    train_acc.reset_states()
+
+    valid_loss.reset_states()
+    valid_acc.reset_states()
+
+    for image, label in train_data:
+        train_step(image, label)
+
+    for image, label in valid_data:
+        valid_step(image, label)
+
+    print(f' 
+        epoch: {epoch + 1}, 
+        loss: {train_loss.result()}, 
+        acc: {train_acc.result()},
+        val_loss: {valid_loss.result()},
+        val_acc: {valid_acc.result()}
+    ')
 
 
 
