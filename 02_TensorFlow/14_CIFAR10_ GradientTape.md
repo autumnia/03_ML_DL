@@ -5,22 +5,10 @@
     Functional API
 
 ## 학습
-    train_on_batch
     GradientTape
 
 ## 어플리케이션
     트랜스퍼러닝( VGG16 )    
-
-<!-- 
-for data in train_datasets.take(5);
-    image = tf.cast(data['image'].tf.float32) / 255.0
-    label = data['label']
-
-    # print(data['image'].shape)
-    # print(data['label'])
-    # print(data['image']) 
--->
-
 
 ## 실습
 ```Python
@@ -63,7 +51,6 @@ for image, label in train_data.tak(1):
 
 # 단계 3  모델 생성
 input_ = input( shape( 32, 32, 3) )
-
 x = Conv2D(32, 3, activation='relu')(input_)
 x = MaxPooling2D(2, 2)(x)
 x = Conv2D(64, 3, activation='relu')(x)
@@ -71,7 +58,6 @@ x = MaxPooling2D(2,2)(x)
 x = Flatten()(x)
 x = Dense(32, activation='relu')(x)
 x = Dense(10, activation='softmax')(x)
-
 model = Model(input_, x )
 model.summary()
 
